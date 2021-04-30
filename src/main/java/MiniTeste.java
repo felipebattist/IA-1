@@ -3,9 +3,7 @@ import java.util.*;
 public class MiniTeste {
     static Map<String, String> dicPredicado = new HashMap<String, String>();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String predicado = sc.nextLine();
+    public void inicializaDic(){
         dicPredicado.put("nenhum", "¬");
         dicPredicado.put("é", "->");
         dicPredicado.put("com", "^");
@@ -20,6 +18,13 @@ public class MiniTeste {
         dicPredicado.put("ou", "v");
         dicPredicado.put("sou", "->");
         dicPredicado.put("se", "^");
+        dicPredicado.put("qualquer","∀");
+        dicPredicado.put("então","->");
+    }
+
+    public ArrayList<String> tradutorLP(String predicado) {
+        inicializaDic();
+
         String[] predicadosList = predicado.split(" ");
         for (int i = 0; i < predicadosList.length; i++) {
             String atual = predicadosList[i].toLowerCase(Locale.ROOT);
@@ -29,10 +34,10 @@ public class MiniTeste {
         }
         ArrayList<String> predicadoArray = new ArrayList<>(Arrays.asList(predicadosList));
         analisadorDuplicidade(predicadoArray);
-        analisadorLexico(predicadoArray);
+        return analisadorLexico(predicadoArray);
     }
 
-    public static ArrayList<String> analisadorDuplicidade(ArrayList<String> predicado) {
+    public static void analisadorDuplicidade(ArrayList<String> predicado) {
         for (int i = 1; i < predicado.size(); i++) {
             if (predicado.get(i).equals(predicado.get(i - 1))) {
                 predicado.remove(i);
@@ -43,11 +48,11 @@ public class MiniTeste {
             } else if (predicado.get(i - 1).equals("∀") && (predicado.get(i).equals("mundo"))) {
                 predicado.remove(i);
             }
+
         }
-        return predicado;
     }
 
-    public static void analisadorLexico(ArrayList<String> input) {
+    public static ArrayList<String> analisadorLexico(ArrayList<String> input) {
         ArrayList<String> funcao = new ArrayList<>();
         ArrayList<String> variavel = new ArrayList<>();
         ArrayList<String> simbolo = new ArrayList<>();
@@ -66,6 +71,10 @@ public class MiniTeste {
             } else if (input.get(i).equals("nada")) {
                 input.remove(i);
             } else if (input.get(i).equals("de")) {
+                input.remove(i);
+            } else if (input.get(i).equals("um") || (input.get(i).equals("uma"))){
+                input.remove(i);
+            } else if (input.get(i-1).equals("não") && input.get(i).equals("é")){
                 input.remove(i);
             }
         }
@@ -89,13 +98,15 @@ public class MiniTeste {
             }
             i++;
         }
-
+        i = 1;
         //Pega todas as variáveis tlgd boy
         for (i = 1; i < input.size(); i++) {
             //Se o anterior for simbolo, eu sou função
             if (!simbolo.contains(input.get(i)) && !funcao.contains(input.get(i))) {
                 if (funcao.contains(input.get(i - 1))) {
-                    variavel.add(input.get(i));
+                    if(!variavel.contains(input.get(i))){
+                        variavel.add(input.get(i));
+                    }
                 }
             }
             //Se o anterior for função, eu sou variável
@@ -107,7 +118,7 @@ public class MiniTeste {
         }
 
         //Se tiver imp depois de neg então troca
-        for (i = 1; i < funcao.size(); i++) {
+        for (i = 1; i < simbolo.size(); i++) {
             if (simbolo.get(i).equals("->") && simbolo.get(i - 1).equals("¬")) {
                 simbolo.set(i, "¬");
                 simbolo.set(i - 1, "->");
@@ -175,10 +186,14 @@ public class MiniTeste {
                 saida.remove(i);
             }
         }
+        /*
         System.out.println(simbolo+" Simbolo");
         System.out.println(funcao+" função");
         System.out.println(variavel+" variavel");
         System.out.println(saida);
+         */
+        analisadorDuplicidade(saida);
+        return(saida);
 
     }
 }
