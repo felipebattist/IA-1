@@ -60,9 +60,12 @@ public class MiniTeste {
             }
             if(aux > 1){
                 saida.remove(i);
+                aux--;
             }
         }
     }
+
+
 
     public static ArrayList<String> analisadorLexico(ArrayList<String> input) {
         ArrayList<String> funcao = new ArrayList<>();
@@ -162,6 +165,16 @@ public class MiniTeste {
                 }
             } else {
                 if (!funcao.isEmpty()) {
+                    if (simbolo.isEmpty()){
+                        int index = saida.size() - 1;
+                        String aux = saida.get(index);
+                        if (aux.equals('¬')){
+                            saida.remove(index);
+                            saida.add("v");
+                            saida.add("¬");
+                            saida.add(funcao.get(iterador) + ("(x)"));
+                        }
+                    }
                     if (!variavel.isEmpty()) {
                         saida.add(funcao.get(iterador) + "(x," + variavel.get(0) + ")");
                         variavel.remove(0);
@@ -205,7 +218,9 @@ public class MiniTeste {
         System.out.println(saida);
          */
         analisadorDuplicidade(saida);
+        System.out.println(saida);
         implicaDuplosRemove(saida);
+        System.out.println(saida);
         return(saida);
 
     }
