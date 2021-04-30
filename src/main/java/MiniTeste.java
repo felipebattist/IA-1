@@ -52,6 +52,18 @@ public class MiniTeste {
         }
     }
 
+    public static void implicaDuplosRemove(ArrayList<String> saida){
+        int aux = 0;
+        for(int i = 0; i<saida.size(); i++){
+            if(saida.get(i).equals("->")){
+                aux++;
+            }
+            if(aux > 1){
+                saida.remove(i);
+            }
+        }
+    }
+
     public static ArrayList<String> analisadorLexico(ArrayList<String> input) {
         ArrayList<String> funcao = new ArrayList<>();
         ArrayList<String> variavel = new ArrayList<>();
@@ -193,6 +205,7 @@ public class MiniTeste {
         System.out.println(saida);
          */
         analisadorDuplicidade(saida);
+        implicaDuplosRemove(saida);
         return(saida);
 
     }
