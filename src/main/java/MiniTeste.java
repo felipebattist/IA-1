@@ -164,17 +164,7 @@ public class MiniTeste {
                     variavel.remove(0);
                 }
             } else {
-                if (!funcao.isEmpty()) {
-                    if (simbolo.isEmpty()){
-                        int index = saida.size() - 1;
-                        String aux = saida.get(index);
-                        if (aux.equals('¬')){
-                            saida.remove(index);
-                            saida.add("v");
-                            saida.add("¬");
-                            saida.add(funcao.get(iterador) + ("(x)"));
-                        }
-                    }
+                if (!funcao.isEmpty()){
                     if (!variavel.isEmpty()) {
                         saida.add(funcao.get(iterador) + "(x," + variavel.get(0) + ")");
                         variavel.remove(0);
